@@ -18,7 +18,39 @@ def crop(img, area):
     roi = img[y:y+height, x:x+width]
     
     return roi
+
+
+def sub_align(img):
+    rows,cols = img.shape
+    res_1_ = cv2.matchTemplate(img,template_1,cv2.TM_CCOEFF)
+    res_3_ = cv2.matchTemplate(img,template_3,cv2.TM_CCOEFF)
+
+    _, _, _, max_loc_1_ = cv2.minMaxLoc(res_1_)
+    _, _, _, max_loc_3_ = cv2.minMaxLoc(res_3_)
+    del res_1_
+    del res_3_
+    pos_1 = np.array([max_loc_1_[0], max_loc_1_[1]])
+    pos_3 = np.array([max_loc_3_[0], max_loc_3_[1]])
     
+    #translate
+    trans = def_pos - pos_1
+    M = np.float32([[1,0,trans[0]],[0,1,trans[1]]])
+    dst = cv2.warpAffine(img,M,(cols,rows))
+    #rotation
+    angle = angle_between(pos_3-pos_1, def_pos2-def_pos)
+    M = cv2.getRotationMatrix2D((def_pos[0],def_pos[1]),angle,1)
+    dst = cv2.warpAffine(dst,M,(cols,rows))
+    return dst
+def aligne(img, path):
+    template_img = cv2.imread(path, 0)
+    def_pos = np.array([320, 1098])
+    def_pos2 = np.array([1350, 1097])
+    template_1 = template_img[1100:1225, 320:440]
+    template_3 = template_img[1100:1225, 1350:1650]
+    return sub_align(img)
+
+    
+
 def align(img, template):
     
     # Find size of image1
