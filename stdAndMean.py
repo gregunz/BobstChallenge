@@ -52,36 +52,42 @@ def angle_between(p1, p2):
     ang1 = np.arctan2(*p1[::-1])
     ang2 = np.arctan2(*p2[::-1])
     return np.rad2deg((ang1 - ang2) % (2 * np.pi))
+def aligne(img):
+    rows,cols = img.shape
+    res_1_ = cv2.matchTemplate(img,template_1,cv2.TM_CCOEFF)
+    res_3_ = cv2.matchTemplate(img,template_3,cv2.TM_CCOEFF)
+
+    _, _, _, max_loc_1_ = cv2.minMaxLoc(res_1_)
+    _, _, _, max_loc_3_ = cv2.minMaxLoc(res_3_)
+    del res_1_
+    del res_3_
+    pos_1 = np.array([max_loc_1_[0], max_loc_1_[1]])
+    pos_3 = np.array([max_loc_3_[0], max_loc_3_[1]])
+    
+    #translate
+    trans = def_pos - pos_1
+    M = np.float32([[1,0,trans[0]],[0,1,trans[1]]])
+    dst = cv2.warpAffine(img,M,(cols,rows))
+    #rotation
+    angle = angle_between(pos_3-pos_1, def_pos2-def_pos)
+    M = cv2.getRotationMatrix2D((def_pos[0],def_pos[1]),angle,1)
+    dst = cv2.warpAffine(dst,M,(cols,rows))
+    return dst
 def proccess_split(s):
     imgs = []
     i=0
-    for IMG_NAME in tqdm(images_path[split[s][0] : split[s][1]]):
+    for IMG_NAME in tqdm(images_path[split[s][0] : split[s][0]+10]):
         i+=1
         img = cv2.imread(IMG_NAME, 0)
-        rows,cols = img.shape
-        res_1_ = cv2.matchTemplate(img,template_1,cv2.TM_CCOEFF)
-        res_3_ = cv2.matchTemplate(img,template_3,cv2.TM_CCOEFF)
-
-        _, _, _, max_loc_1_ = cv2.minMaxLoc(res_1_)
-        _, _, _, max_loc_3_ = cv2.minMaxLoc(res_3_)
-        del res_1_
-        del res_3_
-        pos_1 = np.array([max_loc_1_[0], max_loc_1_[1]])
-        pos_3 = np.array([max_loc_3_[0], max_loc_3_[1]])
-        
-        #translate
-        trans = def_pos - pos_1
-        M = np.float32([[1,0,trans[0]],[0,1,trans[1]]])
-        dst = cv2.warpAffine(img,M,(cols,rows))
-        #rotation
-        angle = angle_between(pos_3-pos_1, def_pos2-def_pos)
-        M = cv2.getRotationMatrix2D((def_pos[0],def_pos[1]),angle,1)
-        dst = cv2.warpAffine(dst,M,(cols,rows))
+        dst = aligne(img)
         shape = dst.shape
+        print(dst.dtype)
         #dst = cv2.resize(dst, dsize=(int(shape[1]/4), int(shape[0]/4)))
+        dst = cv2.erode(dst, (2,2))
         imgs.append(dst)
         cv2.imwrite('output/centred_for_split_'+str(s)+'-'+str(i)+'.jpg',dst)
     np_imgs = np.array(imgs)
+    np.save('maximums.npy', np_imgs)
     del imgs
     mean = np_imgs.mean(axis=0)
     std = np_imgs.std(axis=0)
