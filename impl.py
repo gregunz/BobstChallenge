@@ -20,38 +20,28 @@ def crop(img, area):
     return roi
 
 
-def sub_align(img):
+def align(img, def_pos, templates):
     rows,cols = img.shape
-    res_1_ = cv2.matchTemplate(img,template_1,cv2.TM_CCOEFF)
-    res_3_ = cv2.matchTemplate(img,template_3,cv2.TM_CCOEFF)
-
-    _, _, _, max_loc_1_ = cv2.minMaxLoc(res_1_)
-    _, _, _, max_loc_3_ = cv2.minMaxLoc(res_3_)
-    del res_1_
-    del res_3_
-    pos_1 = np.array([max_loc_1_[0], max_loc_1_[1]])
-    pos_3 = np.array([max_loc_3_[0], max_loc_3_[1]])
+    res = [cv2.matchTemplate(img, t, cv2.TM_CCOEFF) for t in templates]
+    max_loc = [cv2.minMaxLoc(r) for r in res]
+    pos = [np.array([m_l[0], m_l[1]]) for m_l in max_loc]
     
     #translate
-    trans = def_pos - pos_1
-    M = np.float32([[1,0,trans[0]],[0,1,trans[1]]])
-    dst = cv2.warpAffine(img,M,(cols,rows))
+    trans = def_pos[0] - pos[0]
+    M = np.array([[1,0,trans[0]],[0,1,trans[1]]])
+    dst = cv2.warpAffine(img, M, img.shape)
     #rotation
-    angle = angle_between(pos_3-pos_1, def_pos2-def_pos)
-    M = cv2.getRotationMatrix2D((def_pos[0],def_pos[1]),angle,1)
-    dst = cv2.warpAffine(dst,M,(cols,rows))
-    return dst
-def aligne(img, path):
-    template_img = cv2.imread(path, 0)
-    def_pos = np.array([320, 1098])
-    def_pos2 = np.array([1350, 1097])
-    template_1 = template_img[1100:1225, 320:440]
-    template_3 = template_img[1100:1225, 1350:1650]
-    return sub_align(img)
+    angle = angle_between(pos[1] - pos[0], def_pos[1] - def_pos[0])
+    M = cv2.getRotationMatrix2D((def_pos[0][0], def_pos[0][1]), angle, 1)
+    dst2 = cv2.warpAffine(dst, M, img.shape)
+    return dst2
 
-    
+def angle_between(p1, p2):
+    ang1 = np.arctan2(*p1[::-1])
+    ang2 = np.arctan2(*p2[::-1])
+    return np.rad2deg((ang1 - ang2) % (2 * np.pi))
 
-def align(img, template):
+def old_align(img, template):
     
     # Find size of image1
     sz = template.shape
@@ -60,18 +50,8 @@ def align(img, template):
     warp_mode = cv2.MOTION_AFFINE
     warp_matrix = np.eye(2, 3, dtype=np.float32)
 
-    # Specify the number of iterations.
-    number_of_iterations = 20
-
-    # Specify the threshold of the increment
-    # in the correlation coefficient between two iterations
-    termination_eps = 1e-10;
-
-    # Define termination criteria
-    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, number_of_iterations,  termination_eps)
-
     # Run the ECC algorithm. The results are stored in warp_matrix.
-    (cc, warp_matrix) = cv2.findTransformECC(template, img, warp_matrix, warp_mode, criteria)
+    (_, warp_matrix) = cv2.findTransformECC(template, img, warp_matrix, warp_mode)
 
     img_aligned = cv2.warpAffine(img, warp_matrix, (sz[1],sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
     return img_aligned
@@ -89,7 +69,7 @@ def show(img):
     
 def mask_contour(img, perc=0.98):
     cnt = contour(img)
-    full_mask = np.zeros(template.shape, dtype=np.uint8)
+    full_mask = np.zeros(img.shape, dtype=np.uint8)
     tmp1 = cv2.drawContours(full_mask, [cnt], 0, 255, -1)
     w, h = tmp1.shape
     tmp2 = cv2.resize(tmp1, (int(h * perc), int(w * perc)), interpolation=cv2.INTER_AREA)
