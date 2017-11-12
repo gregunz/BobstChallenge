@@ -67,4 +67,4 @@ def mask_contour(img, perc=0.98):
     h_dif = h - smaller_h
     tmp3[w_dif // 2:smaller_w + w_dif // 2, h_dif // 2:smaller_h + h_dif // 2] = tmp2
     mask = tmp3 // 128
-    return img * mask
+    return mask
