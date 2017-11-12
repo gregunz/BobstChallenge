@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def contour(img):
+def biggest_contour(img):
     
     _, thresh = cv2.threshold(img,127,255,0)
     
@@ -11,6 +11,14 @@ def contour(img):
     cnt = max(contours, key = cv2.contourArea)
     
     return cnt
+
+def contours(img):
+    
+    _, thresh = cv2.threshold(img,127,255,0)
+    
+    _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    
+    return contours
 
 def crop(img, area):
     
@@ -43,6 +51,10 @@ def angle_between(p1, p2):
 
 def old_align(img, template):
     
+    if(len(img.shape) == 3):
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    else:
+        img_gray = img
     # Find size of image1
     sz = template.shape
 
@@ -51,7 +63,7 @@ def old_align(img, template):
     warp_matrix = np.eye(2, 3, dtype=np.float32)
 
     # Run the ECC algorithm. The results are stored in warp_matrix.
-    (_, warp_matrix) = cv2.findTransformECC(template, img, warp_matrix, warp_mode)
+    (_, warp_matrix) = cv2.findTransformECC(template, img_gray, warp_matrix, warp_mode)
 
     img_aligned = cv2.warpAffine(img, warp_matrix, (sz[1],sz[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
     return img_aligned
@@ -68,7 +80,7 @@ def show(img):
     plt.show()
     
 def mask_contour(img, perc=0.98):
-    cnt = contour(img)
+    cnt = biggest_contour(img)
     full_mask = np.zeros(img.shape, dtype=np.uint8)
     tmp1 = cv2.drawContours(full_mask, [cnt], 0, 255, -1)
     w, h = tmp1.shape
