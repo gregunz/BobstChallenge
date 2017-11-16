@@ -1,4 +1,5 @@
-#intervals
+# intervals of each "pose"
+# incluse - inclusive
 
 splits = {
 	1: (759,954),
