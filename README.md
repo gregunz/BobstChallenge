@@ -45,4 +45,4 @@ Our engineer team will take shifts to **support you night and day**.
 
 ## Details
 
-For more information about Bobst and the challenge they proposed, check their <a href="BOBST_Tech-Talk.pdf">tech talk slides</a>
+For more detailed information about Bobst and the challenge they proposed, check their <a href="BOBST_Tech-Talk.pdf">tech talk slides</a>
