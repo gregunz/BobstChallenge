@@ -1,3 +1,5 @@
+# Winning team - [Bobst Challenge](BOBST_Tech-Talk.pdf) - [Lauzhack 2017](http://lauzhack.com)
+
 **Team Members**
 
 - Maxime Delisle
@@ -7,7 +9,7 @@
 
 **tl-dr**
 
-Our team successfully solved one challenge (winner) during Lauzhack 2017 hackaton where ~250 participants where competing on various challenges.
+Our team successfully solved one challenge during Lauzhack 2017 hackaton where ~250 participants where competing on various challenges.
 
 # Lauzhack 2017
 
