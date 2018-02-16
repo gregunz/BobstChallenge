@@ -9,7 +9,7 @@
 
 **tl-dr**
 
-Our team successfully solved one challenge during Lauzhack 2017 hackaton where ~250 participants where competing on various challenges.
+Our team successfully solved one challenge during Lauzhack 2017 hackathon where ~250 participants where competing on various challenges.
 
 # Lauzhack 2017
 
