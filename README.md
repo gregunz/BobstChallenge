@@ -7,7 +7,7 @@
 - Adam Ztot
 - Grégoire Clément
 
-**tl-dr**
+# TLDR
 
 Our team successfully solved one challenge during Lauzhack 2017 hackathon where ~250 participants where competing on various challenges.
 
