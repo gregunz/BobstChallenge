@@ -1,6 +1,6 @@
-# Winning team - [Bobst Challenge](BOBST_Tech-Talk.pdf) - [Lauzhack 2017](http://lauzhack.com)
+# Winning team of [Bobst Challenge](BOBST_Tech-Talk.pdf) @ [Lauzhack 2017](http://lauzhack.com)
 
-**Team Members**
+**Members**
 
 - Maxime Delisle
 - Charles Gallay
