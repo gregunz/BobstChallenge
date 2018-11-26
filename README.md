@@ -12,7 +12,7 @@ Making use of computer visualization tools such as OpenCV, our team managed to d
 - Grégoire Clément
 
 
-# Lauzhack 2017
+# LauzHack 2017
 
 LauzHack is a student-run hackathon at EPFL in Lausanne, Switzerland.
 
