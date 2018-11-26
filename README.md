@@ -1,4 +1,8 @@
-# Winning team of [Bobst Challenge](BOBST_Tech-Talk.pdf) @ [Lauzhack 2017](http://2017.lauzhack.com/)
+# Winning team of [Bobst Challenge](BOBST_Tech-Talk.pdf) @ [LauzHack 2017](http://2017.lauzhack.com/)
+
+# TLDR
+Making use of computer visualization tools such as OpenCV, our team managed to detect defect in a manafacturing envirronment, a challenge proposed by Bobst company. We were even the only team to fully solve the problem during Lauzhack 2017 hackathon where ~250 participants where competing on various challenges.
+### Project submission available on [devpost](https://devpost.com/software/bobstchallenge)
 
 **Members**
 
@@ -7,9 +11,6 @@
 - Adam Ztot
 - Grégoire Clément
 
-# TLDR
-
-Our team successfully solved one challenge during Lauzhack 2017 hackathon where ~250 participants where competing on various challenges.
 
 # Lauzhack 2017
 
