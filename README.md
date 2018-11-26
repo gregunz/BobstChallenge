@@ -1,4 +1,4 @@
-# Winning team of [Bobst Challenge](BOBST_Tech-Talk.pdf) @ [Lauzhack 2017](http://lauzhack.com)
+# Winning team of [Bobst Challenge](BOBST_Tech-Talk.pdf) @ [Lauzhack 2017](http://2017.lauzhack.com/)
 
 **Members**
 
